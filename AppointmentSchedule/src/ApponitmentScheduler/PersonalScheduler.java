@@ -16,22 +16,13 @@ public class PersonalScheduler {
 	
 	public boolean addApponitment()
 	{
-		//Appointment a1=new Appointment();
+		
 		Scanner s=new Scanner(System.in);
 		Date d1=null;
 		 Connection con=null;
 		int n=0;
 		System.out.println("Enter the name, Appointment date in mm/dd/yyyy format and enter the time");
-		//a1.setName(s.nextLine());
-		
-		
-			// d1=sd.parse(d);
-			//a1.setDate(sd.format(d));
-		
-		
-		//a1.setTime(s.next());
-		//return a1;
-		 
+				 
 		try {
 			Class.forName("org.h2.Driver");
 			con = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/test1");
@@ -50,7 +41,7 @@ public class PersonalScheduler {
 			}
 		}
 		 catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -88,11 +79,42 @@ public class PersonalScheduler {
 		return null;
 	}
 	
+	public List<Appointment> allAppointmentsByDate(String ndate)
+	{
+		Connection con=null;
+		Appointment a=new Appointment();
+		ArrayList<Appointment> al=new ArrayList<>();
+		try {
+			Class.forName("org.h2.Driver");
+			con=DriverManager.getConnection("jdbc:h2:tcp://localhost/~/test1");
+			if(con!=null)
+			{
+			PreparedStatement ps=con.prepareStatement("select * from appointment where appdate='"+ndate+"'");
+			
+			ResultSet rs=ps.executeQuery();
+			while(rs.next())
+			{
+				a.setName(rs.getString("name"));
+				a.setDate(rs.getString("appdate"));
+				a.setTime(rs.getString("apptime"));
+				al.add(a);
+			}
+			return al;
+			
+			}
+		}
+		catch(Exception e)
+		{
+			return null;
+		}
+		return null;
+	}
+	
 public static void main(String[] a)
 {
 	
 	PersonalScheduler p=new PersonalScheduler();
-	System.out.println("Menu \n 1.Add Appointment \n 2.List Appointment by name \n 3.Exit");
+	System.out.println("Menu \n 1.Add Appointment \n 2.List Appointment by name \n 3.List Appointment by date \n 4.Exit");
 	System.out.println("Enter choicce");
 	int ch;
 	Scanner s=new Scanner(System.in);
@@ -116,7 +138,19 @@ public static void main(String[] a)
 			System.out.println(a2.getTime());
 		}
 		break;
-	case 3:
+	case 3:System.out.println("Enter date to get apponitments");
+	
+	String ndate=s.nextLine();
+		 al= p.allAppointmentsByUser(ndate);
+		System.out.println("your appointments are");
+		for(Appointment a2:al)
+		{
+			System.out.println(a2.getName());
+			System.out.println(a2.getDate());
+			System.out.println(a2.getTime());
+		}
+		break;
+	case 4:
 		System.out.println("invalid and you exiting");
 		System.exit(0);
 		break;
