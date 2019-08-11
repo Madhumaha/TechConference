@@ -141,7 +141,7 @@ public static void main(String[] a)
 	case 3:System.out.println("Enter date to get apponitments");
 	
 	String ndate=s.nextLine();
-		 al= p.allAppointmentsByUser(ndate);
+		 al= p.allAppointmentsByDate(ndate);
 		System.out.println("your appointments are");
 		for(Appointment a2:al)
 		{
